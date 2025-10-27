@@ -3,6 +3,7 @@ package racingcar;
 import camp.nextstep.edu.missionutils.Console;
 import camp.nextstep.edu.missionutils.Randoms;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Application {
@@ -22,6 +23,8 @@ public class Application {
         for (int i = 0; i < tryNum; i++) {
             raceOneRound(cars);
         }
+
+        winnerAnnouncement(cars);
     }
 
     private static List<String> validateCarNames(String carNames) {
@@ -44,10 +47,19 @@ public class Application {
     }
 
     private static Integer validateTryNum(String tryNum) {
-        if (!tryNum.matches("[0-9]+")) {
+        int validTryNum;
+
+        try {
+            validTryNum = Integer.parseInt(tryNum);
+        } catch (NumberFormatException e) {
             throw new IllegalArgumentException();
         }
-        return Integer.parseInt(tryNum);
+
+        if (validTryNum < 1) {
+            throw new IllegalArgumentException();
+        }
+
+        return validTryNum;
     }
 
     private static void raceOneRound(List<Car> cars) {
@@ -56,5 +68,20 @@ public class Application {
             car.display();
         }
         System.out.println();
+    }
+
+    private static void winnerAnnouncement(List<Car> cars) {
+        cars.sort(Comparator.comparing(Car::getPosition).reversed());
+
+        List<String> winnerNames = new ArrayList<>();
+        int winnerPosition = cars.get(0).getPosition();
+        for (Car car : cars) {
+            if (car.getPosition() == winnerPosition) {
+                winnerNames.add(car.getName());
+            }
+        }
+
+        System.out.print("최종 우승자 : ");
+        System.out.println(String.join(", ", winnerNames));
     }
 }
