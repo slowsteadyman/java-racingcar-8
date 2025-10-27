@@ -29,13 +29,13 @@ public class Application {
         for  (String participateCandidate : participateCandidates) {
             participateCandidate = participateCandidate.trim();
             if (participateCandidate.isEmpty() || participateCandidate.length() > 5) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("자동차 이름은 공백으로 구성되어서는 안 되고 5글자 이하여야 합니다.");
             }
             participants.add(participateCandidate);
         }
 
         if (participants.size() < 2) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("자동차 이름을 2대 이상 입력해야 합니다.");
         }
 
         return participants;
@@ -53,11 +53,11 @@ public class Application {
         try {
             validTryNum = Integer.parseInt(tryNum);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("시도 횟수는 숫자로 입력되어야 합니다.");
         }
 
         if (validTryNum < 1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("시도 횟수는 1 이상이어야 합니다.");
         }
 
         return validTryNum;
