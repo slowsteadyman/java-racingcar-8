@@ -12,7 +12,7 @@ public class Application {
         String tryNum = readTryNum();
         int validTryNum = validateTryNum(tryNum);
 
-        List<Car> cars = createCars(carNames);
+        List<Car> cars = createCars(validCarNames);
 
         progressRace(cars, validTryNum);
         List<String> winnerNames = findWinnerNames(cars);
