@@ -9,45 +9,47 @@ import java.util.List;
 public class Application {
     public static void main(String[] args) {
         List<String> carNames = readCarNames();
-        int tryNum = readTryNum();
+        List<String> validCarNames = validateCarNames(carNames);
+        String tryNum = readTryNum();
+        int validTryNum = validateTryNum(tryNum);
+
         List<Car> cars = createCars(carNames);
 
-        progressRace(cars, tryNum);
-        winnerAnnouncement(cars);
+        progressRace(cars, validTryNum);
+        List<String> winnerNames = findWinnerNames(cars);
+        winnerAnnouncement(winnerNames);
     }
 
     private static List<String> readCarNames() {
         System.out.println("경주할 자동차 이름을 입력하세요.(이름은 쉼표(,) 기준으로 구분)");
-        List<String> carNames = validateCarNames(Console.readLine());
-        return carNames;
+        String carNames = Console.readLine();
+        return List.of(carNames.split(",", -1));
     }
 
-    private static List<String> validateCarNames(String carNames) {
-        String[] participateCandidates = carNames.split(",", -1);
-        List<String> participants = new ArrayList<>();
+    private static List<String> validateCarNames(List<String> carNames) {
+        List<String> validCarNames = new ArrayList<>();
 
-        for (String participateCandidate : participateCandidates) {
-            participateCandidate = participateCandidate.trim();
-            if (participateCandidate.isEmpty() || participateCandidate.length() > 5) {
+        for (String carName : carNames) {
+            carName =  carName.trim();
+            if (carName.isEmpty() || carName.length() > 5) {
                 throw new IllegalArgumentException("자동차 이름은 공백으로 구성되어서는 안 되고 5글자 이하여야 합니다.");
             }
-            participants.add(participateCandidate);
+            validCarNames.add(carName);
         }
 
-        if (participants.size() < 2) {
+        if (validCarNames.size() < 2) {
             throw new IllegalArgumentException("자동차 이름을 2대 이상 입력해야 합니다.");
         }
 
-        return participants;
+        return validCarNames;
     }
 
-    private static int readTryNum() {
+    private static String readTryNum() {
         System.out.println("시도할 횟수는 몇 회인가요?");
-        int tryNum = validateTryNum(Console.readLine());
-        return tryNum;
+        return Console.readLine();
     }
 
-    private static Integer validateTryNum(String tryNum) {
+    private static int validateTryNum(String tryNum) {
         int validTryNum;
 
         try {
@@ -86,7 +88,7 @@ public class Application {
         System.out.println();
     }
 
-    private static void winnerAnnouncement(List<Car> cars) {
+    private static List<String> findWinnerNames(List<Car> cars) {
         cars.sort(Comparator.comparing(Car::getPosition).reversed());
 
         List<String> winnerNames = new ArrayList<>();
@@ -97,6 +99,10 @@ public class Application {
             }
         }
 
+        return winnerNames;
+    }
+
+    private static void winnerAnnouncement(List<String> winnerNames) {
         System.out.print("최종 우승자 : ");
         System.out.println(String.join(", ", winnerNames));
     }
