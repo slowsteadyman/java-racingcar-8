@@ -8,23 +8,18 @@ import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
+        List<String> carNames = readCarNames();
+        int tryNum = readTryNum();
+        List<Car> cars = createCars(carNames);
+
+        progressRace(cars, tryNum);
+        winnerAnnouncement(cars);
+    }
+
+    private static List<String> readCarNames() {
         System.out.println("경주할 자동차 이름을 입력하세요.(이름은 쉼표(,) 기준으로 구분)");
         List<String> carNames = validateCarNames(Console.readLine());
-
-        System.out.println("시도할 횟수는 몇 회인가요?");
-        int tryNum = validateTryNum(Console.readLine());
-
-        List<Car> cars = new ArrayList<>();
-        for (int i = 0; i < carNames.size(); i++) {
-            cars.add(new Car(carNames.get(i)));
-        }
-
-        System.out.println("실행 결과");
-        for (int i = 0; i < tryNum; i++) {
-            raceOneRound(cars);
-        }
-
-        winnerAnnouncement(cars);
+        return carNames;
     }
 
     private static List<String> validateCarNames(String carNames) {
@@ -46,6 +41,12 @@ public class Application {
         return participants;
     }
 
+    private static int readTryNum() {
+        System.out.println("시도할 횟수는 몇 회인가요?");
+        int tryNum = validateTryNum(Console.readLine());
+        return tryNum;
+    }
+
     private static Integer validateTryNum(String tryNum) {
         int validTryNum;
 
@@ -60,6 +61,21 @@ public class Application {
         }
 
         return validTryNum;
+    }
+
+    private static List<Car> createCars(List<String> carNames) {
+        List<Car> cars = new ArrayList<>();
+        for (int i = 0; i < carNames.size(); i++) {
+            cars.add(new Car(carNames.get(i)));
+        }
+        return cars;
+    }
+
+    private static void progressRace(List<Car> cars, int tryNum) {
+        System.out.println("실행 결과");
+        for (int i = 0; i < tryNum; i++) {
+            raceOneRound(cars);
+        }
     }
 
     private static void raceOneRound(List<Car> cars) {
