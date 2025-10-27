@@ -26,7 +26,7 @@ public class Application {
         String[] participateCandidates = carNames.split(",", -1);
         List<String> participants = new ArrayList<>();
 
-        for  (String participateCandidate : participateCandidates) {
+        for (String participateCandidate : participateCandidates) {
             participateCandidate = participateCandidate.trim();
             if (participateCandidate.isEmpty() || participateCandidate.length() > 5) {
                 throw new IllegalArgumentException("자동차 이름은 공백으로 구성되어서는 안 되고 5글자 이하여야 합니다.");
